@@ -2,40 +2,39 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemy;
-    private Transform _spawner;
+    [SerializeField] private Enemy _enemy;
+    
     private Transform[] _spawnPoints;
-    private float _secondsCounter;
     private float _spawnInterval;
     private float _runningTime;
-    private Random _random;
+    
     private void Start()
     {
-        _spawner = GetComponent<Transform>();
-        _spawnPoints = new Transform[_spawner.childCount];
-        _secondsCounter = 2f;
-        _spawnInterval = _secondsCounter;
-        _random = new Random();
+        _spawnPoints = new Transform[transform.childCount];
+        _spawnInterval = 2f;
 
-        for (int i = 0; i < _spawner.childCount; i++)
-            _spawnPoints[i] = _spawner.GetChild(i);
+        for (int i = 0; i < transform.childCount; i++)
+            _spawnPoints[i] = transform.GetChild(i);
+
+        StartCoroutine(SpawnEnemy());
     }
 
-    private void Update()
+    private IEnumerator SpawnEnemy()
     {
-        _runningTime += Time.deltaTime;
+        var waitForTwoSeconds = new WaitForSeconds(_spawnInterval);
+        bool isOpen = true;
 
-        if (_runningTime > _secondsCounter)
+        while (isOpen)
         {
-            Transform spawnPoint = _spawnPoints[_random.Next(_spawner.childCount)];
+            Transform spawnPoint = _spawnPoints[Random.Range(0, transform.childCount)];
             
             Instantiate(_enemy, spawnPoint.position, spawnPoint.rotation, spawnPoint);
-            _secondsCounter += _spawnInterval;
+
+            yield return waitForTwoSeconds;
         }
-        
     }
 }
