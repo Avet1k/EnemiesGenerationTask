@@ -10,16 +10,6 @@ public class Enemy : MonoBehaviour
     private Target _target;
     private EnemyMovement _movement;
 
-    public void SetColor(Color color)
-    {
-        _renderer.material.color = color;
-    }
-
-    public void SetTarget(Target target)
-    {
-        _target = target;
-    }
-
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
@@ -29,5 +19,15 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         _movement.SetTarget(_target);
+    }
+    
+    public void SetColor(Color color)
+    {
+        _renderer.material.color = color;
+    }
+
+    public void SetTarget(Target target)
+    {
+        _target = target;
     }
 }

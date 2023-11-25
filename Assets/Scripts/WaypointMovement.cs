@@ -9,7 +9,7 @@ public class WaypointMovement : MonoBehaviour
 
     private Transform[] _points;
     private int _currentPoint;
-    private float _speed = 1f;
+    private float _speed = 3f;
 
     private void Start()
     {
