@@ -8,17 +8,17 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private Enemy _enemy;
     
-    private Transform[] _spawnPoints;
+    private SpawnPoint[] _spawnPoints;
     private float _spawnInterval;
     private float _runningTime;
     
     private void Start()
     {
-        _spawnPoints = new Transform[transform.childCount];
+        _spawnPoints = new SpawnPoint[transform.childCount];
         _spawnInterval = 2f;
 
         for (int i = 0; i < transform.childCount; i++)
-            _spawnPoints[i] = transform.GetChild(i);
+            _spawnPoints[i] = transform.GetChild(i).GetComponent<SpawnPoint>();
 
         StartCoroutine(SpawnEnemy());
     }
@@ -30,10 +30,14 @@ public class EnemySpawner : MonoBehaviour
 
         while (isOpen)
         {
-            Transform spawnPoint = _spawnPoints[Random.Range(0, transform.childCount)];
+            int index = Random.Range(0, transform.childCount);
+            SpawnPoint spawnPoint = _spawnPoints[index];
+            Transform spawnTransform = spawnPoint.transform;
             
-            Instantiate(_enemy, spawnPoint.position, spawnPoint.rotation, spawnPoint);
-
+            var enemy = Instantiate(_enemy, spawnTransform.position, spawnTransform.rotation);
+            enemy.SetColor(spawnPoint.GetCurrentColor);
+            enemy.SetTarget(spawnPoint.GetTarget);
+            
             yield return waitForTwoSeconds;
         }
     }

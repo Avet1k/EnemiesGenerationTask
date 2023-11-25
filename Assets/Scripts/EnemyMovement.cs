@@ -1,14 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Vector3 = System.Numerics.Vector3;
 
 public class EnemyMovement : MonoBehaviour
 {
-    private float _speed = 0.01f;
+    private Target _target;
+    private float _speed = 2f;
+
+    public void SetTarget(Target target)
+    {
+        _target = target;
+    }
     
     private void Update()
     {
-        transform.position += transform.forward * _speed;
+        transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, 
+            _speed * Time.deltaTime);
     }
 }
